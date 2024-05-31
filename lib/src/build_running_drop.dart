@@ -9,13 +9,13 @@ class BuildRunningDrop extends StatelessWidget {
   final Color color;
   final int itemCount;
   const BuildRunningDrop({
-    Key? key,
+    super.key,
     required this.controller,
     required this.selectedIndex,
     required this.previousIndex,
     required this.color,
     required this.itemCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

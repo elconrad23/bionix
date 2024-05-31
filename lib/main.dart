@@ -1,150 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:bionix/widgets/water_drop_nav_bar.dart';
+// import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
+import 'package:provider/provider.dart';
+import 'screens/chat.dart';
+import 'screens/home.dart';
+import 'screens/prognosis.dart';
+import 'screens/saved_orthopedics.dart';
+import 'widgets/temperature_counter_widget.dart';
+import 'widgets/water_drop_nav_bar.dart';
+
+final List<Widget> appScreens = [
+  const MyHomePage(),
+  const TemperatureCounterWidget(),
+  const PrognosisScreen(),
+  const SavedOrthopedicsScreen(),
+  const ChatScreen(),
+];
+
+class NavigationProvider extends ChangeNotifier {
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
+
+  int get selectedIndex => _selectedIndex;
+  PageController get pageController => _pageController;
+
+  void onItemSelected(int index) {
+    _selectedIndex = index;
+    _pageController.animateToPage(
+      _selectedIndex,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutQuad,
+    );
+    notifyListeners();
+  }
+}
 
 void main() {
-  runApp(MyApp());
+  // FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  late final Color navigationBarColor= Colors.white;
-  final int selectedIndex = 0;
-  late final PageController pageController;
-
-  MyApp({super.key}) {
-    pageController = PageController(initialPage: selectedIndex);
-  }
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider(
+      create: (_) => NavigationProvider(),
+      child: MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: MyHomePage(
-        title: 'Bionix Home Page',
-        navigationBarColor: navigationBarColor,
-        selectedIndex: selectedIndex,
-        pageController: pageController,),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key,
-  required this.title,
-  required this.navigationBarColor,
-  required this.selectedIndex,
-  required this.pageController,
-});
-
-  final String title;
-  final Color navigationBarColor ;
-  final int selectedIndex;
-  final PageController pageController;
-
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int selectedIndex = 0;
-  late PageController pageController;
-  late Color navigationBarColor;
-
-  @override
-  void initState() {
-    super.initState();
-    pageController = PageController(initialPage: selectedIndex);
-  }
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        controller: pageController,
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.bookmark_rounded,
-              size: 56,
-              color: Colors.amber[400],
-            ),
+      home: Consumer<NavigationProvider>(
+      builder: (context, navigationProvider, child) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: appScreens.elementAt(navigationProvider.selectedIndex),
+          bottomNavigationBar: WaterDropNavBar(
+            backgroundColor: Colors.greenAccent,
+            onItemSelected: navigationProvider.onItemSelected,
+            selectedIndex: navigationProvider.selectedIndex,
+            barItems: <BarItem>[
+              BarItem(
+                filledIcon: Icons.home_rounded,
+                outlinedIcon: Icons.home_rounded,
+              ),
+              BarItem(
+                filledIcon: Icons.favorite_rounded,
+                outlinedIcon: Icons.favorite_border_rounded,
+              ),
+              BarItem(
+                filledIcon: Icons.email_rounded,
+                outlinedIcon: Icons.email_outlined,
+              ),
+              BarItem(
+                filledIcon: Icons.app_registration_outlined,
+                outlinedIcon: Icons.app_registration_outlined,
+              ),
+              BarItem(
+                filledIcon: Icons.add_to_home_screen_rounded,
+                outlinedIcon: Icons.add_to_home_screen_rounded,
+              ),
+            ],
           ),
-          Container(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.favorite_rounded,
-              size: 56,
-              color: Colors.amber[400],
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.favorite_rounded,
-              size: 56,
-              color: Colors.red[400],
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.email_rounded,
-              size: 56,
-              color: Colors.green[400],
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.folder_rounded,
-              size: 56,
-              color: Colors.blue[400],
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: WaterDropNavBar(
-        backgroundColor: navigationBarColor,
-        onItemSelected: (int index) {
-          setState(() {
-            selectedIndex = index;
-          });
-          pageController.animateToPage(
-            selectedIndex,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeOutQuad,
-          );
-        },
-        selectedIndex: selectedIndex,
-        barItems: <BarItem>[
-          BarItem(
-            filledIcon: Icons.bookmark_rounded,
-            outlinedIcon: Icons.bookmark_border_rounded,
-          ),
-          BarItem(
-            filledIcon: Icons.favorite_rounded,
-            outlinedIcon: Icons.favorite_border_rounded,
-          ),
-          BarItem(
-            filledIcon: Icons.email_rounded,
-            outlinedIcon: Icons.email_outlined,
-          ),
-          BarItem(
-            filledIcon: Icons.folder_rounded,
-            outlinedIcon: Icons.folder_outlined,
-          ),
-        ],
-      ),
+        );
+      },),
+    ),
     );
   }
 }

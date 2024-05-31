@@ -44,7 +44,7 @@ class WaterDropNavBar extends StatefulWidget {
     super.key,
   })  : inactiveIconColor = inactiveIconColor ?? waterDropColor,
         assert(barItems.length > 1, 'You must provide minimum 2 bar items'),
-        assert(barItems.length < 5, 'Maximum bar items count is 4');
+        assert(barItems.length < 6, 'Maximum bar items count is 5');
 
   @override
   _WaterDropNavBarState createState() => _WaterDropNavBarState();
@@ -87,12 +87,13 @@ class _WaterDropNavBarState extends State<WaterDropNavBar>
     final double iconSize = widget.iconSize;
     final Color inactiveIconColor = widget.inactiveIconColor;
     final double bottomPadding =
-        widget.bottomPadding ?? MediaQuery.of(context).padding.bottom;
+      widget.bottomPadding ?? MediaQuery.of(context).padding.bottom;
     final double barHeight = 60 + bottomPadding;
+    // final double barWidth = widget.width;
     return Container(
       height: barHeight,
       color: backgroundColor,
-      child: Stack(
+      child: ListView(
         children: <Widget>[
           Align(
             alignment: Alignment.bottomCenter,

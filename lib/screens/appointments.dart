@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/app_bar.dart';
 
-class AboutUsScreen extends StatelessWidget {
-  const AboutUsScreen({super.key});
+class AppointmentsScreen extends StatelessWidget {
+  const AppointmentsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class AboutUsScreen extends StatelessWidget {
               const SizedBox(height: 20.0),
               const CircleAvatar(
                 radius: 80.0,
-                backgroundImage: AssetImage('assets/company_logo.png'),
+                backgroundImage: AssetImage('logo/vector-robotic-arm.png'),
               ),
               const SizedBox(height: 20.0),
               const Text(

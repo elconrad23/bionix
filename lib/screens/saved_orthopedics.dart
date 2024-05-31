@@ -36,7 +36,7 @@ class SavedOrthopedicsScreen extends StatelessWidget {
               const SizedBox(height: 20.0),
               const CircleAvatar(
                 radius: 80.0,
-                backgroundImage: AssetImage('assets/company_logo.png'),
+                backgroundImage: AssetImage('logo/logo.png'),
               ),
               const SizedBox(height: 20.0),
               const Text(

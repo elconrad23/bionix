@@ -2,17 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-// import '../main.dart';
+import '../main.dart';
 import '../widgets/app_bar.dart';
 import 'saved_orthopedics.dart';
-import 'settings.dart';
 
 // import 'appointments.dart';
 
-// class MyHomePage extends StatefulWidget {
+// class DoctorList extends StatefulWidget {
 //   final String title;
 
-//   const MyHomePage({super.key, required this.title});
+//   const DoctorList({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -23,104 +22,89 @@ import 'settings.dart';
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class DoctorList extends StatelessWidget {
+  const DoctorList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 142, 179, 241),
       appBar: CustomAppBar(
-        title: ("Home"),
+        title: ("Bionix Doctors"),
         actions: [
-          const Icon(Icons.home_rounded),
-
+          IconButton(
+            icon: const Icon(Icons.home_rounded),
+            onPressed: () {
+              // Handle search button press
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              // Handle search button press
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              Navigator.push(context,
-                MaterialPageRoute(
-                builder: (BuildContext context) => const Settings(),
-                ),
-              );
+              // Handle settings button press
             },
           ),
-          const CircleAvatar(
-                radius: 13.0,
-                backgroundImage: AssetImage("logo/logo.png")),
+          const Image(image: AssetImage("logo/logo.png")),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+      body: Center(
+        child: ListView(
           children:[
-            
-              InkWell(
-              onTap: (){
-                Navigator.push(context,
-                MaterialPageRoute(
-                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
-                ),
-              );},
-              child: const Row(
-                children:[ 
-                  Icon(Icons.location_pin),
-                  Text("Find a location"),],
-        ),),
-
             InkWell(
-              focusColor: Colors.amberAccent,
               onTap: (){
                 Navigator.push(context,
                 MaterialPageRoute(
                 builder: (BuildContext context) => const SavedOrthopedicsScreen(),
                 ),
               );},
-              child: const Row(
-                children:[
-                  Icon(Icons.plus_one),
-                  Text("Choose a doctor"),
-                ],
-        ),),
-        InkWell(
-              onTap: (){
-                Navigator.push(context,
-                MaterialPageRoute(
-                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
-                ),
-              );},
-              child: const Row(
-                children:[
-                  Icon(Icons.apple_outlined),
-                  Text("Make an appointment"),
-                ],
-        ),),
-        InkWell(
-              onTap: (){
-                Navigator.push(context,
-                MaterialPageRoute(
-                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
-                ),
-              );},
-              child: const Row(
-                children:[
-                  Icon(Icons.access_time),
-                  Text("ER Waiting Period"),
-        ],),),
-        InkWell(
-              onTap: (){
-                Navigator.push(context,
-                MaterialPageRoute(
-                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
-                ),
-              );},
-              child: const Row(
-                children:[
-                  Icon(Icons.location_pin),
-                  Text("Find an Emergency Care location"),
-                ],
+              child: const Text("Find a location"),
+
         ),
-        ),],
-        ),),),);
+        InkWell(
+              onTap: (){
+                Navigator.push(context,
+                MaterialPageRoute(
+                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
+                ),
+              );},
+              child: const Text("Choose a doctor"),
+
+        ),
+        InkWell(
+              onTap: (){
+                Navigator.push(context,
+                MaterialPageRoute(
+                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
+                ),
+              );},
+              child: const Text("Make an appointment"),
+
+        ),
+        InkWell(
+              onTap: (){
+                Navigator.push(context,
+                MaterialPageRoute(
+                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
+                ),
+              );},
+              child: const Text("ER Waiting Period"),
+        ),
+        InkWell(
+              onTap: (){
+                Navigator.push(context,
+                MaterialPageRoute(
+                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
+                ),
+              );},
+              child: const Text("Find an Emergency Care location"),
+
+        ),
+        ],
+        ),),);
   }}

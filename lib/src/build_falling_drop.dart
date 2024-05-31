@@ -13,8 +13,8 @@ class BuildFallingDrop extends StatelessWidget {
     required this.height,
     required this.color,
     required this.itemWidth,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
