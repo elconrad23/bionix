@@ -68,7 +68,6 @@ class _WaterDropNavBarState extends State<WaterDropNavBar>
 
   void _onTap(int index) {
     final int selectedIndex = widget.selectedIndex;
-
     if (selectedIndex == index || _controller.isAnimating) {
       return;
     } else {
@@ -89,9 +88,11 @@ class _WaterDropNavBarState extends State<WaterDropNavBar>
     final double bottomPadding =
       widget.bottomPadding ?? MediaQuery.of(context).padding.bottom;
     final double barHeight = 60 + bottomPadding;
-    // final double barWidth = widget.width;
+    const double barwidth = double.infinity;
+
     return Container(
       height: barHeight,
+      width: barwidth,
       color: backgroundColor,
       child: ListView(
         children: <Widget>[
@@ -101,7 +102,7 @@ class _WaterDropNavBarState extends State<WaterDropNavBar>
               animation: _controller,
               builder: (_, __) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                // crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: items.map(
                   (BarItem item) {
                     final int index = items.indexOf(item);

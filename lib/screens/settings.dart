@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/app_bar.dart';
+import '../widgets/leading_widget.dart';
 import 'saved_orthopedics.dart';
 
 class Settings extends StatefulWidget {
@@ -18,16 +19,14 @@ class _SettingsState extends State<Settings> {
       appBar: CustomAppBar(
         title: ("Bionix Home"),
         actions: [
-          const Icon(Icons.home_rounded),
-          
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-                Navigator.push(context,
-                MaterialPageRoute(
-                builder: (BuildContext context) => const SavedOrthopedicsScreen(),
-                ),
-              );},),
+              Navigator.push(context,
+              MaterialPageRoute(
+              builder: (BuildContext context) => const SavedOrthopedicsScreen(),
+              ),
+          );},),
 
           IconButton(
             icon: const Icon(Icons.settings),
@@ -41,6 +40,8 @@ class _SettingsState extends State<Settings> {
           ),
           const Image(image: AssetImage("logo/vector-robotic-arm.png")),
         ],
+        leading: const LeadingWidget(),
+        backgroundColor: Colors.white70,
       ),
       body: Center(
         child: ListView(
@@ -52,20 +53,20 @@ class _SettingsState extends State<Settings> {
                 builder: (BuildContext context) => const SavedOrthopedicsScreen(),
                 ),
               );},
-              child: const Text("Find a location"),
+            child: const Text("Find a location"),
+            ),
 
-        ),
-        InkWell(
+            InkWell(
               onTap: (){
                 Navigator.push(context,
                 MaterialPageRoute(
                 builder: (BuildContext context) => const SavedOrthopedicsScreen(),
                 ),
               );},
-              child: const Text("Choose a doctor"),
+            child: const Text("Choose a doctor"),
+            ),
 
-        ),
-        InkWell(
+            InkWell(
               onTap: (){
                 Navigator.push(context,
                 MaterialPageRoute(
@@ -73,9 +74,9 @@ class _SettingsState extends State<Settings> {
                 ),
               );},
               child: const Text("Make an appointment"),
+            ),
 
-        ),
-        InkWell(
+            InkWell(
               onTap: (){
                 Navigator.push(context,
                 MaterialPageRoute(
@@ -83,8 +84,9 @@ class _SettingsState extends State<Settings> {
                 ),
               );},
               child: const Text("ER Waiting Period"),
-        ),
-        InkWell(
+            ),
+
+            InkWell(
               onTap: (){
                 Navigator.push(context,
                 MaterialPageRoute(
@@ -92,8 +94,7 @@ class _SettingsState extends State<Settings> {
                 ),
               );},
               child: const Text("Find an Emergency Care location"),
-
-        ),
+            ),
         ],
         ),),);
   }

@@ -3,15 +3,20 @@ import 'package:flutter/material.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/leading_widget.dart';
 
-class AboutUsScreen extends StatelessWidget {
-  const AboutUsScreen({super.key});
+class DeviceStatusScreen extends StatefulWidget {
+  const DeviceStatusScreen({super.key});
 
+  @override
+  State<DeviceStatusScreen> createState() => _DeviceStatusScreenState();
+}
+
+class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: CustomAppBar(
-        title: ("About Us"),
+        title: ("View Device Status"),
         actions: [
           IconButton(
             icon: const Icon(Icons.location_pin),
@@ -43,7 +48,7 @@ class AboutUsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20.0),
               const Text(
-                'About Us',
+                'About',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -52,7 +57,7 @@ class AboutUsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10.0),
               const Text(
-                'Bionix, a futuristic company!',
+                'Bionix device temperature',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
@@ -61,7 +66,7 @@ class AboutUsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20.0),
               const Text(
-                'Mission',
+                'Device humidity',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,

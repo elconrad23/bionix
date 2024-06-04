@@ -1,6 +1,8 @@
 import 'package:bionix/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/leading_widget.dart';
+
 class PrognosisScreen extends StatelessWidget {
   const PrognosisScreen({super.key});
 
@@ -23,6 +25,8 @@ class PrognosisScreen extends StatelessWidget {
             },
           ),
         ],
+        leading: const LeadingWidget(),
+        backgroundColor: Colors.white70,
       ),
       body: Center(
         child: ListView(

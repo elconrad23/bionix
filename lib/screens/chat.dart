@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/app_bar.dart';
+import '../widgets/leading_widget.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -24,7 +25,9 @@ class ChatScreen extends StatelessWidget {
               // Handle settings button press
             },
           ),
-        ],
+        ], 
+        leading: const LeadingWidget(),
+        backgroundColor: Colors.white70,
       ),
 
       body: SafeArea(

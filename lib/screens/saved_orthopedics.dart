@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/app_bar.dart';
+import '../widgets/leading_widget.dart';
 
 class SavedOrthopedicsScreen extends StatelessWidget {
   const SavedOrthopedicsScreen({super.key});
@@ -25,6 +26,8 @@ class SavedOrthopedicsScreen extends StatelessWidget {
             },
           ),
         ],
+        leading: const LeadingWidget(),
+        backgroundColor: Colors.white70,
       ),
 
       body: SafeArea(
