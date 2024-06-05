@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
 import 'package:provider/provider.dart';
+import 'screens/analytics.dart';
 import 'screens/chat.dart';
 import 'screens/home.dart';
 import 'screens/prognosis.dart';
@@ -86,6 +85,7 @@ class MyApp extends StatelessWidget {
           ),
         );
       },),
+      navigatorObservers: [BluetoothAdapterStateObserver(),],
     ),
     );
   }

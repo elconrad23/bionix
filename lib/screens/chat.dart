@@ -39,7 +39,7 @@ class ChatScreen extends StatelessWidget {
               const SizedBox(height: 20.0),
               const CircleAvatar(
                 radius: 80.0,
-                backgroundImage: AssetImage('assets/company_logo.png'),
+                backgroundImage: AssetImage('logo/logo.png'),
               ),
               const SizedBox(height: 20.0),
               const Text(
@@ -52,7 +52,7 @@ class ChatScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10.0),
               const Text(
-                'Bionix, a futuristic company!',
+                'Bionix chat',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,

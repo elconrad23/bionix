@@ -33,6 +33,7 @@ class AppointmentsScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(20.0),
+          alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -43,7 +44,7 @@ class AppointmentsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20.0),
               const Text(
-                'My Appointments',
+                'Book an Appointment',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -52,49 +53,23 @@ class AppointmentsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10.0),
               const Text(
-                'Bionix, a futuristic company!',
+                'Booked Appointments',
                 style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20.0),
-              const Text(
-                'Mission',
-                style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 24.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
               const SizedBox(height: 10.0),
               const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                'Past Appointments',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20.0),
-              const Text(
-                'Vision',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 10.0),
-              const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {

@@ -37,6 +37,7 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
 
       body: SafeArea(
         child: Container(
+          alignment: Alignment.center,
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,11 +45,11 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
               const SizedBox(height: 20.0),
               const CircleAvatar(
                 radius: 80.0,
-                backgroundImage: AssetImage('assets/company_logo.png'),
+                backgroundImage: AssetImage('logo.png'),
               ),
               const SizedBox(height: 20.0),
               const Text(
-                'About',
+                'My Device',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -66,7 +67,7 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
               ),
               const SizedBox(height: 20.0),
               const Text(
-                'Device humidity',
+                '',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -75,7 +76,7 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
               ),
               const SizedBox(height: 10.0),
               const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                'degrees C',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
@@ -84,7 +85,7 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
               ),
               const SizedBox(height: 20.0),
               const Text(
-                'Vision',
+                'Humidity',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -93,7 +94,7 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
               ),
               const SizedBox(height: 10.0),
               const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                'levels indicated here',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,

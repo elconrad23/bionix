@@ -1,8 +1,4 @@
-//Genevieve
-
 import 'package:flutter/material.dart';
-
-// import '../main.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/leading_widget.dart';
 import 'appointments.dart';
@@ -10,27 +6,35 @@ import 'doctor_list.dart';
 import 'emergency_care_locations.dart';
 import 'erwaiting_screen.dart';
 import 'device_status.dart';
-import 'saved_orthopedics.dart';
 import 'settings.dart';
 
-// import 'appointments.dart';
+class MyHomePage extends StatefulWidget {
+  //final String title;
 
-// class MyHomePage extends StatefulWidget {
-//   final String title;
-
-//   const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
+  @override
+  State<MyHomePage> createState() => MyHomePageScreen();
+}
 
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class MyHomePageScreen extends State<MyHomePage> {
+  final Color navigationBarColor = Colors.white;
+  int selectedIndex = 0;
+  late PageController pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController(initialPage: selectedIndex);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +57,15 @@ class MyHomePage extends StatelessWidget {
         leading: const LeadingWidget(),
         backgroundColor: Colors.white70,
       ),
-      body: SafeArea(
-        child: Container(
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        children: <Widget>[
+          Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(20.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center ,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 5,),
@@ -70,6 +78,7 @@ class MyHomePage extends StatelessWidget {
                 ),
               );},
               child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children:[
                   Icon(Icons.device_thermostat),
                   Text("Device status"),],
@@ -86,6 +95,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 );},
                 child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children:[
                     Icon(Icons.plus_one),
                     Text("Choose a doctor"),
@@ -102,6 +112,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 );},
                 child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children:[
                     Icon(Icons.apple_outlined),
                     Text("Make an appointment"),
@@ -118,6 +129,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 );},
                 child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children:[
                     Icon(Icons.access_time),
                     Text("ER Waiting Period"),
@@ -133,10 +145,12 @@ class MyHomePage extends StatelessWidget {
                   ),
                 );},
                 child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children:[
                     Icon(Icons.location_pin),
                     Text("Find an Emergency Care location"),
                 ],
               ),
-        ),],),),),);
+        ),],),),],),);
   }}
+  

@@ -41,10 +41,11 @@ class WaterDropNavBar extends StatefulWidget {
     this.waterDropColor = const Color(0xFF5B75F0),
     this.iconSize = 28,
     Color? inactiveIconColor,
-    super.key,
+    Key? key,
   })  : inactiveIconColor = inactiveIconColor ?? waterDropColor,
         assert(barItems.length > 1, 'You must provide minimum 2 bar items'),
-        assert(barItems.length < 6, 'Maximum bar items count is 5');
+        assert(barItems.length < 6, 'Maximum bar items count is 5'),
+        super(key: key);
 
   @override
   _WaterDropNavBarState createState() => _WaterDropNavBarState();
@@ -88,25 +89,28 @@ class _WaterDropNavBarState extends State<WaterDropNavBar>
     final double bottomPadding =
       widget.bottomPadding ?? MediaQuery.of(context).padding.bottom;
     final double barHeight = 60 + bottomPadding;
-    const double barwidth = double.infinity;
 
     return Container(
       height: barHeight,
-      width: barwidth,
       color: backgroundColor,
-      child: ListView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.topCenter,
             child: AnimatedBuilder(
               animation: _controller,
-              builder: (_, __) => Row(
+              builder: (_, __) =>  SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: items.map(
                   (BarItem item) {
                     final int index = items.indexOf(item);
-                    return BuildIconButton(
+                    return Flexible(
+                      child: BuildIconButton(
                       bottomPadding: bottomPadding,
                       barHeight: barHeight,
                       barColor: backgroundColor,
@@ -119,12 +123,12 @@ class _WaterDropNavBarState extends State<WaterDropNavBar>
                       selectedIcon: item.filledIcon,
                       unslectedIcon: item.outlinedIcon,
                       onPressed: () => _onTap(index),
-                    );
+                    ),);
                   },
                 ).toList(),
               ),
             ),
-          ),
+          ),),
           BuildRunningDrop(
             itemCount: items.length,
             controller: _controller,

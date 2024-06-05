@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/about_us.dart';
+
 class LeadingWidget extends StatefulWidget {
   const LeadingWidget({super.key});
 
@@ -16,39 +18,84 @@ class _LeadingWidgetState extends State<LeadingWidget> {
           // add desired output
         }else if(value == "settings"){
           // add desired output
+        }else if(value == "settings"){
+          // add desired output
         }else if(value == "logout"){
           // add desired output
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        const PopupMenuItem(
+        PopupMenuItem(
           value: "profile",
           child: Row(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(right: 8.0),
                 child: Icon(Icons.account_circle_outlined ),
               ),
-              Text(
+              ElevatedButton(
+                onPressed:()  {
+                  Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) => const AboutUsScreen()),); },
+                child: const Text(
                 'Profile',
                 style: TextStyle(fontSize: 15),
-              ),
+              ),),
             ],
           ),
         ),
-        const PopupMenuItem(
+        PopupMenuItem(
           value: "settings",
           child: Row(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(right: 8.0),
                 child: Icon(Icons.settings)
               ),
-              Text(
-                'Settings',
+              ElevatedButton(
+                onPressed:()  {
+                  Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) => const AboutUsScreen()),); },
+                child: const Text('Settings',
                 style: TextStyle(fontSize: 15),
               ),
-            ],
+            ),
+      ],),
+    ),
+      PopupMenuItem(
+          value: "aboutus",
+          child: Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(Icons.settings)
+              ),
+              ElevatedButton(
+                onPressed:()  {
+                  Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) => const AboutUsScreen()),); },
+                child: const Text('About Us',
+                style: TextStyle(fontSize: 15),
+              ),
+          ),],
+          ),
+      ),
+      PopupMenuItem(
+          value: "aboutus",
+          child: Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(Icons.settings)
+              ),
+              ElevatedButton(
+                onPressed:()  {
+                  Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) => const AboutUsScreen()),); },
+                child: const Text('About Us',
+                style: TextStyle(fontSize: 15),
+              ),
+          ),],
           ),
       ),],
       iconSize: 35,
