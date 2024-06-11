@@ -1,35 +1,49 @@
 #include <ESP32Servo.h>
-#include "BluetoothSerial.h"
 #include <DHT.h>
 
+// Declare the pin that is connected to the DHT sensor
 #define DHTPIN 12
+
+// Type of the DHT sensor
 #define DHTTYPE DHT22
+
+// Creating the DHT object
 DHT dht(DHTPIN, DHTTYPE);
 
-BluetoothSerial serialBT;
+// Declaring the servo objects
 Servo pinky;
 Servo servo2;
 Servo servo3;
 Servo servo4;
 Servo servo5;
 
+// Declaring constants
 const int pinkyPin = 26;
 const int servo2Pin = 25;
 const int servo3Pin = 33;
 const int servo4Pin = 32;
 const int servo5Pin = 27;
-const int potentialmeter = 13;
+//potentiometer declarations
+const int potPin1 = 13;
+const int potPin2 = 34;
+const int potPin3 = 35;
 const int ledPin = 2;
 
-char cmd;
+// Variables to store previous millis values for non-blocking delay
+unsigned long previousMillis = 0;
+const long interval = 2000;
+
+// Function prototypes
+void performAction(int position1, int position2, int position3);
+void setServoPositions(int pos1, int pos2, int pos3, int pos4, int pos5);
 
 void setup() {
   Serial.begin(115200);
-  serialBT.begin("Esp32");
   pinMode(ledPin, OUTPUT);
-  dht.begin();
-  delay(200); // Delay for sensor to stabilize
+  dht.begin(); // Starting the DHT sensor
+  delay(200); // Delay for DHT sensor to stabilize
 
+  // Attaching the servos to the pins 
   pinky.attach(pinkyPin);
   servo2.attach(servo2Pin);
   servo3.attach(servo3Pin);
@@ -38,84 +52,48 @@ void setup() {
 }
 
 void loop() {
-  //get the potentialmeter readings
-  int servoPosition = map(analogRead(potentialmeter), 0, 4096, 0, 180);
-  //write the angle to the motors
-  pinky.write(servoPosition);
-  servo2.write(servoPosition);
-  servo3.write(servoPosition);
-  servo4.write(servoPosition);
-  servo5.write(servoPosition);
-  Serial.println(servoPosition);
-  delay(20);
+  // Non-blocking delay using millis
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
 
-//Get the temperature readings
-  float temp = dht.readTemperature();
-  //get the humudity reading
-  float humidity = dht.readHumidity();
+    // Get the temperature and humidity readings
+    float temp = dht.readTemperature();
+    float humidity = dht.readHumidity();
 
-//check if the values are not null then send them to the app and display to the serial monitor
-  if (!isnan(temp) && !isnan(humidity)) {
-    Serial.print("Temperature: ");
-    Serial.print(temp);
-    Serial.print("C ");
-    Serial.print("Humidity: ");
-    Serial.print(humidity);
-    Serial.println(" % ");
-    serialBT.println(temp);
-    serialBT.println(humidity);
-  } else {
-    Serial.println("Failed to read from DHT sensor!");
-  }
-  delay(2000); // Delay for sensor to provide accurate values
-
-//check if there is any device connected
-  if (serialBT.available()) {
-    cmd = serialBT.read();
-    Serial.print("Received (char): ");
-    Serial.println(cmd);
-    Serial.print("Received (int): ");
-    Serial.println((int)cmd);
-
-    if (cmd == '\n' || cmd == '\r') {
-      return;
-    }
-
-    serialBT.print("Received: ");
-    serialBT.println(cmd);
-
-    if (cmd == '1') {
-      digitalWrite(ledPin, HIGH);//turn on the led
-      serialBT.println("LED turned ON");//print the message to the app
-    } else if (cmd == '0') {
-      digitalWrite(ledPin, LOW);//turn the led off
-      serialBT.println("LED turned OFF");//send the message to the application
+    // Check if the values are valid then send them to the app and display on the serial monitor
+    if (!isnan(temp) && !isnan(humidity)) {
+      Serial.printf("Temperature: %.2f C Humidity: %.2f %%\n", temp, humidity);
     } else {
-      processCommand(cmd);//call the process command function to write angles to the motors
-      serialBT.println("The received command is undefined");
-      Serial.println("The received command is undefined");
+      Serial.println("Failed to read from DHT sensor!");
     }
+
+    // Get the potentiometer readings
+    int servoPosition = map(analogRead(potPin1), 0, 4096, 0, 180);
+    int servoPosition1 = map(analogRead(potPin2), 0, 4096, 0, 180);
+    int servoPosition2 = map(analogRead(potPin3), 0, 4096, 0, 180);
+
+    // Perform actions based on the potentiometer readings
+    performAction(servoPosition, servoPosition1, servoPosition2);
   }
 }
-//command to process what has been received from the application
-void processCommand(char cmd) {
-  int angle = -1;
-  switch (cmd) {
-    case 'a': angle = 0; break;
-    case 'b': angle = 45; break;
-    case 'c': angle = 90; break;
-    case 'd': angle = 180; break;
-    default: return;
-  }
-//write the to the motors via application
 
-  if (angle != -1) {
-    pinky.write(angle);
-    servo2.write(angle);
-    servo3.write(angle);
-    servo4.write(angle);
-    servo5.write(angle);
-    serialBT.print("Servos set to position: ");
-    serialBT.println(angle);
+void performAction(int position, int position1, int position2) {
+  if (position2 >= 20) {
+    setServoPositions(position2, position2, position2, 0, position2);
+  } else if (position1 >= 20) {
+    setServoPositions(position1, position1, 0, 0, position1);
+  } else {
+    setServoPositions(position, position, position, position, position);
   }
+}
+
+void setServoPositions(int pos1, int pos2, int pos3, int pos4, int pos5) {
+  pinky.write(pos1);
+  servo2.write(pos2);
+  servo3.write(pos3);
+  servo4.write(pos4);
+  servo5.write(pos5);
+  Serial.printf("Servo Positions - pinky: %d, servo2: %d, servo3: %d, servo4: %d, servo5: %d\n", pos1, pos2, pos3, pos4, pos5);
+  delay(20);
 }
