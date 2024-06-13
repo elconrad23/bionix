@@ -1,40 +1,14 @@
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
+#include <BLE2902.h>
 #include <ESP32Servo.h>
 #include <DHT.h>
-#include <Arduino.h>
-#include <WiFi.h>
-#include <FirebaseESP32.h>
 
-// Provide the token generation process info.
-#include <addons/TokenHelper.h>
+// UUIDs for BLE service and characteristic
+#define SERVICE_UUID        "79a63043-fdc4-493a-b8c0-840635e5a332"
+#define CHARACTERISTIC_UUID_TX "79a63043-fdc4-493a-b8c0-840635e5a332"
 
-// Provide the RTDB payload printing info and other helper functions.
-#include <addons/RTDBHelper.h>
-
-/* 1. Define the WiFi credentials */
-#define WIFI_SSID "Airqo"
-#define WIFI_PASSWORD "A1rq0@2022"
-
-// For the following credentials, see examples/Authentications/SignInAsUser/EmailPassword/EmailPassword.ino
-
-/* 2. Define the API Key */
-#define API_KEY "AIzaSyDdeyywd9kSpA1CIgLBaDZvBdxvKTn7FIw"
-
-/* 3. Define the RTDB URL */
-#define DATABASE_URL "https://esp32-fb-367d7-default-rtdb.firebaseio.com/" 
-
-/* 4. Define the user Email and password that alreadey registerd or added in your project */
-#define USER_EMAIL "esp32.finalyear@gmail.com"
-#define USER_PASSWORD "emb2024"
-
-// Define Firebase Data object
-FirebaseData fbdo;
-
-FirebaseAuth auth;
-FirebaseConfig config;
-
-unsigned long sendDataPrevMillis = 0;
-
-unsigned long count = 0;
 // Declare the pin that is connected to the DHT sensor
 #define DHTPIN 12
 
@@ -57,60 +31,38 @@ const int servo2Pin = 25;
 const int servo3Pin = 33;
 const int servo4Pin = 32;
 const int servo5Pin = 27;
-
-// Variables to store previous millis values for non-blocking delay
-unsigned long previousMillis = 0;
-const long interval = 2000;
 //potentiometer declarations
 const int potPin1 = 13;
 const int potPin2 = 34;
 const int potPin3 = 35;
+const int ledPin = 2;
+// BLE characteristic
+BLECharacteristic *pCharacteristic;
+bool deviceConnected=false;
+
+// Variables to store previous millis values for non-blocking delay
+unsigned long previousMillis = 0;
+const long interval = 2000;
+class MyServerCallbacks: public BLEServerCallbacks {
+  void onConnect (BLEServer* pServer){
+     deviceConnected = true;
+  };
+
+  void onDisconnect (BLEServer* pServer){
+     deviceConnected = false;
+  }
+};
+
 // Function prototypes
 void performAction(int position1, int position2, int position3);
 void setServoPositions(int pos1, int pos2, int pos3, int pos4, int pos5);
-void sendData(float temp, float humidity);
 
-void setup()
-{
-
+void setup() {
   Serial.begin(115200);
+  pinMode(ledPin, OUTPUT);
+  dht.begin(); // Starting the DHT sensor
+  delay(200); // Delay for DHT sensor to stabilize
 
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting to Wi-Fi");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.print(".");
-    delay(300);
-  }
-  Serial.println();
-  Serial.print("Connected with IP: ");
-  Serial.println(WiFi.localIP());
-  Serial.println();
-
-  Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
-
-  /* Assign the api key (required) */
-  config.api_key = API_KEY;
-
-  /* Assign the user sign in credentials */
-  auth.user.email = USER_EMAIL;
-  auth.user.password = USER_PASSWORD;
-
-  /* Assign the RTDB URL (required) */
-  config.database_url = DATABASE_URL;
-
-  /* Assign the callback function for the long running token generation task */
-  config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
-
-  // Comment or pass false value when WiFi reconnection will control by your code or third party library e.g. WiFiManager
-  Firebase.reconnectNetwork(true);
-
-   fbdo.setBSSLBufferSize(4096, 1024 );
-
-
-  Firebase.begin(&config, &auth);
-
-  Firebase.setDoubleDigits(5);
   // Attaching the servos to the pins 
   pinky.attach(pinkyPin);
   servo2.attach(servo2Pin);
@@ -118,11 +70,27 @@ void setup()
   servo4.attach(servo4Pin);
   servo5.attach(servo5Pin);
 
+  // BLE setup
+  BLEDevice::init("ESP32_Final");
+  //create the BLE Server
+  BLEServer *pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new MyServerCallbacks());
+
+  //Create the BLE Service
+  BLEService *pService = pServer->createService(SERVICE_UUID);
+  pCharacteristic = pService->createCharacteristic(CHARACTERISTIC_UUID_TX, BLECharacteristic::PROPERTY_NOTIFY);
+  //BLE2902 needed to notify
+  pCharacteristic->addDescriptor(new BLE2902());
+  //Start the service
+  pService->start();
+  //start advertising
+  pServer->getAdvertising()->start();
+  Serial.println("Waiting for a client to connection to notify....");
 }
 
-void loop()
-{
-   // Non-blocking delay using millis
+void loop() {
+  if(deviceConnected){
+  // Non-blocking delay using millis
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
@@ -134,8 +102,12 @@ void loop()
     // Check if the values are valid then send them to the app and display on the serial monitor
     if (!isnan(temp) && !isnan(humidity)) {
       Serial.printf("Temperature: %.2f C Humidity: %.2f %%\n", temp, humidity);
-       // send the readings to the firebase
-       sendData(temp, humidity);
+       // Prepare readings to send via BLE
+     char valueStr[50];
+     snprintf(valueStr, sizeof(valueStr), "%.2f,%.2f %", temp, humidity);
+     pCharacteristic->setValue(valueStr);
+     pCharacteristic->notify();
+     Serial.println("Sent value: " + String(valueStr));
     } else {
       Serial.println("Failed to read from DHT sensor!");
     }
@@ -147,28 +119,10 @@ void loop()
 
     // Perform actions based on the potentiometer readings
     performAction(servoPosition, servoPosition1, servoPosition2);
-  
- }
-}
-//send data to the firebase
-void sendData(float temp, float humidity){
-  // Firebase.ready() should be called repeatedly to handle authentication tasks.
-if (Firebase.ready())
-  {
-    // Set data to Firebase
-    if (Firebase.setInt(fbdo, "/test/temp", temp) && Firebase.setInt(fbdo, "/test/humidity", humidity))
-    {
-      Serial.println("Set data successfully");
-    }
-    else
-    {
-      Serial.print("Failed setting data: ");
-      Serial.println(fbdo.errorReason());
-    }
   }
 }
+}
 
-//perform action
 void performAction(int position, int position1, int position2) {
   if (position2 >= 20) {
     setServoPositions(position2, position2, position2, 0, position2);
@@ -178,7 +132,7 @@ void performAction(int position, int position1, int position2) {
     setServoPositions(position, position, position, position, position);
   }
 }
-//write the angle to the motors
+
 void setServoPositions(int pos1, int pos2, int pos3, int pos4, int pos5) {
   pinky.write(pos1);
   servo2.write(pos2);
@@ -188,4 +142,3 @@ void setServoPositions(int pos1, int pos2, int pos3, int pos4, int pos5) {
   Serial.printf("Servo Positions - pinky: %d, servo2: %d, servo3: %d, servo4: %d, servo5: %d\n", pos1, pos2, pos3, pos4, pos5);
   delay(20);
 }
-
