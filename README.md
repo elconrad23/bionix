@@ -1,10 +1,10 @@
 # bionix
 
-A new Flutter project.
+A health prosthetics project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a starting point for revolutionary hand replacements that willl render assistance to patients and orthopedics alike.
 
 A few resources to get you started if this is your first Flutter project:
 
@@ -15,8 +15,9 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 "# bionix" 
-#the embedded part
-you need to download the arduino ide with the mecessary libraries inorder to program the esp32
+
+#Embedded system
+you need to download the arduino ide with the necessary libraries inorder to program the esp32 then
 copy and paste the program to your ide, connect everything depending on the pins from the code
-then upload it to the esp32 using the upload button
+then upload it to the esp32 using the upload button.
 
